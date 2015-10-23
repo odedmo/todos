@@ -2,7 +2,7 @@
   "name": "node-token-jwt",
   "main": "server.js",
   "scripts": {
-    "postinstall": "grunt",
+    "postinstall": "grunt uglify",
     "start": "grunt"
   },
   "dependencies": {
