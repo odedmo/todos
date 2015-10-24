@@ -10,7 +10,9 @@ angular.module('Controllers', [])
   $scope.username = '';
 
   $scope.doLogin = function(user) {
+    $scope.$parent.loading = true;
     Data.post('login', user).then(function(results) {
+      $scope.$parent.loading = false;
       Data.toast(results);
       if (results.success) {
         var user = {
@@ -32,7 +34,9 @@ angular.module('Controllers', [])
     password: ''
   };
   $scope.signUp = function(user) {
+    $scope.$parent.loading = true;
     Data.post('signUp', user).then(function(results) {
+      $scope.$parent.loading = false;
       Data.toast(results);
       if (results.success) {
         var user = {
@@ -51,7 +55,9 @@ angular.module('Controllers', [])
 .controller('DashboardController', ['$scope', '$location', 'Data', function($scope, $location, Data) {
 
   $scope.logout = function() {
+    $scope.$parent.loading = true;
     Data.get('logout').then(function(results) {
+      $scope.$parent.loading = false;
       Data.toast(results);
       localStorage.removeItem('user');
       $location.path('login');
@@ -74,19 +80,23 @@ angular.module('Controllers', [])
   };
 
   $scope.deleteTodos = function() {
+    $scope.$parent.loading = true;
     Data.post('deleteTodos', {
         checked: $scope.selected,
         userId: JSON.parse(localStorage.getItem('user')).id
       })
       .then(function(results) {
+        $scope.$parent.loading = false;
         $scope.todos = results.todos;
       });
   };
 
   $scope.createTodo = function() {
+    $scope.$parent.loading = true;
     $scope.formData.userId = JSON.parse(localStorage.getItem('user')).id;
     Data.post('todo', $scope.formData)
       .then(function(results) {
+        $scope.$parent.loading = false;
         if (results.success) {
           $scope.todos = results.todos;
           $scope.formData = null;
@@ -115,4 +125,8 @@ angular.module('Controllers', [])
       $location.path('login');
     }
   });
+}])
+
+.controller('GeneralController', ['$scope', function($scope) {
+  $scope.loading = false;
 }]);
